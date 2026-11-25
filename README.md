@@ -1,5 +1,7 @@
 # Enterprise AI Customer Support & Operations Agent
 
+**Live Production Demo:** [https://smart-support-ai-agent.vercel.app/](https://smart-support-ai-agent.vercel.app/)
+
 A full-stack, bilingual (**Arabic / English**) AI Support & Operations Agent built with **Next.js 16 (App Router)**, **TypeScript**, **Tailwind CSS v4**, **Vercel AI SDK**, **Google Gemini**, and **Supabase (`pgvector`)**.
 
 Designed with a **Split-Screen Workspace Architecture**, combining a customer-facing chat interface with a live operations & ticketing dashboard that synchronizes in real time as the agent executes backend tools and requests human approvals.
