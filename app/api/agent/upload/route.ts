@@ -8,10 +8,10 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 const CANDIDATE_MODELS = [
   process.env.GEMINI_MODEL,
-  'gemini-2.5-flash',
   'gemini-3.5-flash-lite',
-  'gemini-3.1-flash-lite',
   'gemini-flash-lite-latest',
+  'gemini-3.1-flash-lite',
+  'gemini-2.5-flash',
   'gemini-3.5-flash',
   'gemini-3-flash-preview',
 ].filter(Boolean) as string[];
@@ -94,13 +94,7 @@ Task:
       const { text } = await generateText({
         model: google(modelName),
         maxRetries: 0,
-        providerOptions: {
-          google: {
-            thinkingConfig: {
-              thinkingBudget: 0,
-            },
-          },
-        },
+        abortSignal: AbortSignal.timeout(15000),
         messages: [{ role: 'user', content }],
       });
 

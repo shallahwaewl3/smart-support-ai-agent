@@ -14,10 +14,10 @@ import { indexKnowledgeBase, localKeywordSearch } from '@/lib/rag';
 
 const CANDIDATE_MODELS = [
     process.env.GEMINI_MODEL,
-    'gemini-2.5-flash',
     'gemini-3.5-flash-lite',
-    'gemini-3.1-flash-lite',
     'gemini-flash-lite-latest',
+    'gemini-3.1-flash-lite',
+    'gemini-2.5-flash',
     'gemini-3.5-flash',
     'gemini-3-flash-preview',
 ].filter(Boolean) as string[];
@@ -427,13 +427,7 @@ Strict Rules:
                     const result = await generateText({
                         model: google(candidateModel),
                         maxRetries: 0,
-                        providerOptions: {
-                            google: {
-                                thinkingConfig: {
-                                    thinkingBudget: 0,
-                                },
-                            },
-                        },
+                        abortSignal: AbortSignal.timeout(9000),
                         system: systemPrompt,
                         messages: modelMessages,
                         stopWhen: stepCountIs(5),
