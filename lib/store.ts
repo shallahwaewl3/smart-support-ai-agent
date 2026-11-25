@@ -96,6 +96,10 @@ function formatTime(isoDate?: string | null): string {
 
 export function ensureCleanUtf8(text: string, fallback: string): string {
     if (!text) return fallback;
+    // إذا احتوى النص على حروف PDF معكوسة بصرياً (Arabic Presentation Forms) نعيده للنص السليم
+    if (/[\uFB50-\uFDFF\uFE70-\uFEFF]{3,}/.test(text)) {
+        return fallback;
+    }
     if (/(?:Ø.|Ù.){3,}/.test(text)) {
         try {
             const bytes = new Uint8Array(text.length);
@@ -228,14 +232,16 @@ export const store = {
     async getKnowledgeBases(): Promise<{ knowledgeBaseAr: string; knowledgeBaseEn: string }> {
         const state = loadStateFromDisk();
         return {
-            knowledgeBaseAr: state.knowledgeBaseAr,
-            knowledgeBaseEn: state.knowledgeBaseEn,
+            knowledgeBaseAr: ensureCleanUtf8(state.knowledgeBaseAr, DEFAULT_KB_AR),
+            knowledgeBaseEn: ensureCleanUtf8(state.knowledgeBaseEn, DEFAULT_KB_EN),
         };
     },
 
     async getKnowledgeBase(lang: 'ar' | 'en'): Promise<string> {
         const state = loadStateFromDisk();
-        return lang === 'en' ? state.knowledgeBaseEn : state.knowledgeBaseAr;
+        return lang === 'en'
+            ? ensureCleanUtf8(state.knowledgeBaseEn, DEFAULT_KB_EN)
+            : ensureCleanUtf8(state.knowledgeBaseAr, DEFAULT_KB_AR);
     },
 
     async updateKnowledgeBase(lang: 'ar' | 'en', newText: string): Promise<void> {
